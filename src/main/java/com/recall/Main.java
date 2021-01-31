@@ -10,16 +10,17 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
  * Main
+ *
  * @author djhelbert
  */
 @SpringBootApplication
 public class Main {
 
-  /**
-   * @param args the command line arguments
-   */
-  public static void main(String[] args) {
-    SpringApplication.run(Main.class, args);
-  }
-  
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        SpringApplication.run(Main.class, args);
+    }
+
 }
