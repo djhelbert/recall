@@ -1,2 +1,10 @@
 server:
   port : 8080
+
+spring:
+  data:
+    cassandra:
+      contact-points: 127.0.0.1
+      keyspace-name: recall-dev
+      port: 9042
+      schema-action: create_if_not_exists
