@@ -1,5 +1,6 @@
 package com.recall.service.cassandra;
 
+import com.recall.model.Email;
 import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 import org.springframework.data.cassandra.core.mapping.Table;
 
@@ -9,6 +10,19 @@ public class EmailTable {
     private String key;
     private String address;
     private Long total;
+
+    public EmailTable() {
+    }
+
+    public EmailTable(Email email) {
+        this.key = email.normalize();
+        this.address = email.getAddress();
+        this.total = 1l;
+    }
+
+    public void increment() {
+        this.total = total + 1;
+    }
 
     public String getKey() {
         return key;

@@ -1,5 +1,6 @@
 package com.recall.service.cassandra;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.cassandra.config.AbstractCassandraConfiguration;
 import org.springframework.data.cassandra.config.SchemaAction;
@@ -9,9 +10,11 @@ import org.springframework.data.cassandra.core.cql.keyspace.DropKeyspaceSpecific
 import java.util.Arrays;
 import java.util.List;
 
+@Configuration
 public class CassandraConfig extends AbstractCassandraConfiguration {
 
-    public static final String KEYSPACE = "recall";
+    @Value("${spring.data.cassandra.keyspace-name}")
+    private String keySpace;
 
     @Override
     public SchemaAction getSchemaAction() {
@@ -20,19 +23,19 @@ public class CassandraConfig extends AbstractCassandraConfiguration {
 
     @Override
     protected List<CreateKeyspaceSpecification> getKeyspaceCreations() {
-        final CreateKeyspaceSpecification specification = CreateKeyspaceSpecification.createKeyspace(KEYSPACE);
-
-        return Arrays.asList(specification);
+        return Arrays.asList(
+                CreateKeyspaceSpecification.createKeyspace(keySpace)
+                        .ifNotExists().withSimpleReplication());
     }
 
     @Override
     protected List<DropKeyspaceSpecification> getKeyspaceDrops() {
-        return Arrays.asList(DropKeyspaceSpecification.dropKeyspace(KEYSPACE));
+        return Arrays.asList(DropKeyspaceSpecification.dropKeyspace(keySpace));
     }
 
     @Override
     protected String getKeyspaceName() {
-        return KEYSPACE;
+        return keySpace;
     }
 
     @Override
