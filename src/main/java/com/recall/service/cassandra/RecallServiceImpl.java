@@ -9,6 +9,7 @@ import com.recall.service.RecallService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -38,18 +39,19 @@ public class RecallServiceImpl implements RecallService {
             NameTable nameTable = optional.get();
             nameTable.increment();
             nameTableRepo.save(nameTable);
-            response.setStatistics(getStatistics(nameTable.getTotal()));
+            response.setStatistics(getStatistics(nameTable.getTotal(), nameTable.getCreated()));
         } else {
             nameTableRepo.save(new NameTable(name));
-            response.setStatistics(getStatistics(1));
+            response.setStatistics(getStatistics(1, LocalDateTime.now()));
         }
 
         return response;
     }
 
-    private Statistics getStatistics(long total) {
+    private Statistics getStatistics(long total, LocalDateTime time) {
         final Statistics statistics = new Statistics();
         statistics.setTotal(total);
+        statistics.setCreated(time);
 
         return statistics;
     }

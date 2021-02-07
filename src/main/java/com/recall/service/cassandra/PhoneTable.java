@@ -1,7 +1,10 @@
 package com.recall.service.cassandra;
 
+import com.recall.model.Phone;
 import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 import org.springframework.data.cassandra.core.mapping.Table;
+
+import java.time.LocalDateTime;
 
 @Table
 public class PhoneTable {
@@ -11,7 +14,20 @@ public class PhoneTable {
     private String areaCode;
     private String prefix;
     private String number;
+    private LocalDateTime created;
     private Long total;
+
+    public PhoneTable(Phone phone) {
+        this.areaCode = phone.getAreaCode();
+        this.countryCode = phone.getCountryCode();
+        this.number = phone.getNumber();
+        this.prefix = phone.getPrefix();
+        this.created = LocalDateTime.now();
+        this.total = 1l;
+    }
+
+    public PhoneTable() {
+    }
 
     public String getKey() {
         return key;
@@ -59,5 +75,13 @@ public class PhoneTable {
 
     public void setTotal(Long total) {
         this.total = total;
+    }
+
+    public LocalDateTime getCreated() {
+        return created;
+    }
+
+    public void setCreated(LocalDateTime created) {
+        this.created = created;
     }
 }

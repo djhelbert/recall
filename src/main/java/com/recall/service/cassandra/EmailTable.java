@@ -4,11 +4,14 @@ import com.recall.model.Email;
 import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 import org.springframework.data.cassandra.core.mapping.Table;
 
+import java.time.LocalDateTime;
+
 @Table
 public class EmailTable {
     @PrimaryKey
     private String key;
     private String address;
+    private LocalDateTime created;
     private Long total;
 
     public EmailTable() {
@@ -17,6 +20,7 @@ public class EmailTable {
     public EmailTable(Email email) {
         this.key = email.normalize();
         this.address = email.getAddress();
+        this.created = LocalDateTime.now();
         this.total = 1l;
     }
 
@@ -46,5 +50,13 @@ public class EmailTable {
 
     public void setTotal(Long total) {
         this.total = total;
+    }
+
+    public LocalDateTime getCreated() {
+        return created;
+    }
+
+    public void setCreated(LocalDateTime created) {
+        this.created = created;
     }
 }

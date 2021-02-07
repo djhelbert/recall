@@ -4,6 +4,9 @@ import com.recall.model.Name;
 import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 import org.springframework.data.cassandra.core.mapping.Table;
 
+import java.time.LocalDateTime;
+
+
 @Table
 public class NameTable {
     @PrimaryKey
@@ -11,6 +14,7 @@ public class NameTable {
     private String first;
     private String middle;
     private String last;
+    private LocalDateTime created;
     private Long total;
 
     public NameTable() {
@@ -21,6 +25,7 @@ public class NameTable {
         this.first = name.getFirst();
         this.middle = name.getMiddle();
         this.last = name.getLast();
+        this.created = LocalDateTime.now();
         this.total = 1l;
     }
 
@@ -66,5 +71,13 @@ public class NameTable {
 
     public void setTotal(Long total) {
         this.total = total;
+    }
+
+    public LocalDateTime getCreated() {
+        return created;
+    }
+
+    public void setCreated(LocalDateTime created) {
+        this.created = created;
     }
 }
