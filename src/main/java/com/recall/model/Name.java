@@ -1,11 +1,15 @@
 package com.recall.model;
 
+import javax.validation.constraints.NotBlank;
+
 /**
  * Name
  */
 public class Name {
+    @NotBlank(message = "First name is mandatory")
     private String first;
     private String middle;
+    @NotBlank(message = "Last name is mandatory")
     private String last;
 
     public Name(String first, String middle, String last) {

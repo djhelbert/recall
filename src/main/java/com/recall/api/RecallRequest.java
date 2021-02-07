@@ -10,7 +10,7 @@ import java.util.List;
 public class RecallRequest {
     private List<Email> emails = new ArrayList<>();
     private List<Phone> phones = new ArrayList<>();
-    private List<Name> names = new ArrayList<>();
+    private Name name;
 
     public List<Email> getEmails() {
         return emails;
@@ -28,11 +28,11 @@ public class RecallRequest {
         this.phones = phones;
     }
 
-    public List<Name> getNames() {
-        return names;
+    public Name getName() {
+        return name;
     }
 
-    public void setNames(List<Name> names) {
-        this.names = names;
+    public void setName(Name name) {
+        this.name = name;
     }
 }

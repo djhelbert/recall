@@ -1,6 +1,9 @@
 package com.recall.model;
 
+import javax.validation.constraints.NotBlank;
+
 public class Email {
+    @NotBlank(message = "Address is mandatory")
     private String address;
 
     public Email(String address) {

@@ -1,9 +1,12 @@
 package com.recall.model;
 
+import javax.validation.constraints.NotBlank;
+
 public class Phone {
     private String countryCode;
     private String areaCode;
     private String prefix;
+    @NotBlank(message = "Number is mandatory")
     private String number;
 
     public Phone(String countryCode, String areaCode, String prefix, String number) {

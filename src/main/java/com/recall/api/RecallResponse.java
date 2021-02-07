@@ -4,31 +4,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RecallResponse {
-    private List<EmailResponse> emails = new ArrayList<>();
-    private List<NameResponse> names = new ArrayList<>();
-    private List<PhoneResponse> phones = new ArrayList<>();
+    private List<EmailResponse> emailResponses = new ArrayList<>();
+    private List<PhoneResponse> phoneResponses = new ArrayList<>();
+    private NameResponse nameResponse;
 
-    public List<EmailResponse> getEmails() {
-        return emails;
+    public List<EmailResponse> getEmailResponses() {
+        return emailResponses;
     }
 
-    public void setEmails(List<EmailResponse> emails) {
-        this.emails = emails;
+    public void setEmailResponses(List<EmailResponse> emailResponses) {
+        this.emailResponses = emailResponses;
     }
 
-    public List<NameResponse> getNames() {
-        return names;
+    public List<PhoneResponse> getPhoneResponses() {
+        return phoneResponses;
     }
 
-    public void setNames(List<NameResponse> names) {
-        this.names = names;
+    public void setPhoneResponses(List<PhoneResponse> phoneResponses) {
+        this.phoneResponses = phoneResponses;
     }
 
-    public List<PhoneResponse> getPhones() {
-        return phones;
+    public NameResponse getNameResponse() {
+        return nameResponse;
     }
 
-    public void setPhones(List<PhoneResponse> phones) {
-        this.phones = phones;
+    public void setNameResponse(NameResponse nameResponse) {
+        this.nameResponse = nameResponse;
     }
 }
