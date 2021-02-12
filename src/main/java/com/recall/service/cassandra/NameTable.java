@@ -6,7 +6,6 @@ import org.springframework.data.cassandra.core.mapping.Table;
 
 import java.time.LocalDateTime;
 
-
 @Table
 public class NameTable {
     @PrimaryKey
@@ -15,6 +14,7 @@ public class NameTable {
     private String middle;
     private String last;
     private LocalDateTime created;
+    private LocalDateTime updated;
     private Long total;
 
     public NameTable() {
@@ -26,11 +26,13 @@ public class NameTable {
         this.middle = name.getMiddle();
         this.last = name.getLast();
         this.created = LocalDateTime.now();
+        this.updated = LocalDateTime.now();
         this.total = 1l;
     }
 
     public void increment() {
         this.total = total + 1;
+        this.updated = LocalDateTime.now();
     }
 
     public String getKey() {
@@ -79,5 +81,13 @@ public class NameTable {
 
     public void setCreated(LocalDateTime created) {
         this.created = created;
+    }
+
+    public LocalDateTime getUpdated() {
+        return updated;
+    }
+
+    public void setUpdated(LocalDateTime updated) {
+        this.updated = updated;
     }
 }

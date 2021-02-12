@@ -15,7 +15,11 @@ public class PhoneTable {
     private String prefix;
     private String number;
     private LocalDateTime created;
+    private LocalDateTime updated;
     private Long total;
+
+    public PhoneTable() {
+    }
 
     public PhoneTable(Phone phone) {
         this.areaCode = phone.getAreaCode();
@@ -23,10 +27,13 @@ public class PhoneTable {
         this.number = phone.getNumber();
         this.prefix = phone.getPrefix();
         this.created = LocalDateTime.now();
+        this.updated = LocalDateTime.now();
         this.total = 1l;
     }
 
-    public PhoneTable() {
+    public void increment() {
+        this.total = total + 1;
+        this.updated = LocalDateTime.now();
     }
 
     public String getKey() {
@@ -83,5 +90,13 @@ public class PhoneTable {
 
     public void setCreated(LocalDateTime created) {
         this.created = created;
+    }
+
+    public LocalDateTime getUpdated() {
+        return updated;
+    }
+
+    public void setUpdated(LocalDateTime updated) {
+        this.updated = updated;
     }
 }

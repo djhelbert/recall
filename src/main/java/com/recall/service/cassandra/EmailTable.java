@@ -12,6 +12,7 @@ public class EmailTable {
     private String key;
     private String address;
     private LocalDateTime created;
+    private LocalDateTime updated;
     private Long total;
 
     public EmailTable() {
@@ -21,11 +22,13 @@ public class EmailTable {
         this.key = email.normalize();
         this.address = email.getAddress();
         this.created = LocalDateTime.now();
+        this.updated = LocalDateTime.now();
         this.total = 1l;
     }
 
     public void increment() {
         this.total = total + 1;
+        this.updated = LocalDateTime.now();
     }
 
     public String getKey() {
@@ -58,5 +61,13 @@ public class EmailTable {
 
     public void setCreated(LocalDateTime created) {
         this.created = created;
+    }
+
+    public LocalDateTime getUpdated() {
+        return updated;
+    }
+
+    public void setUpdated(LocalDateTime updated) {
+        this.updated = updated;
     }
 }
