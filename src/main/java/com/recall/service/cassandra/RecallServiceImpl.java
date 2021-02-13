@@ -1,11 +1,9 @@
 package com.recall.service.cassandra;
 
-import com.recall.api.EmailResponse;
-import com.recall.api.NameResponse;
-import com.recall.api.RecallRequest;
-import com.recall.api.RecallResponse;
+import com.recall.api.*;
 import com.recall.model.Email;
 import com.recall.model.Name;
+import com.recall.model.Phone;
 import com.recall.model.Statistics;
 import com.recall.service.RecallService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +16,13 @@ import java.util.Optional;
 public class RecallServiceImpl implements RecallService {
     private NameTableRepo nameTableRepo;
     private EmailTableRepo emailTableRepo;
+    private PhoneTableRepo phoneTableRepo;
 
     @Autowired
-    public RecallServiceImpl(NameTableRepo nameTableRepo, EmailTableRepo emailTableRepo) {
+    public RecallServiceImpl(NameTableRepo nameTableRepo, EmailTableRepo emailTableRepo, PhoneTableRepo phoneTableRepo) {
         this.nameTableRepo = nameTableRepo;
         this.emailTableRepo = emailTableRepo;
+        this.phoneTableRepo = phoneTableRepo;
     }
 
     @Override
@@ -33,6 +33,9 @@ public class RecallServiceImpl implements RecallService {
 
         for(Email email : recallRequest.getEmails()) {
             response.getEmailResponses().add(getEmailResponse(email, recallRequest.getName().normalize()));
+        }
+        for(Phone phone : recallRequest.getPhones()) {
+            response.getPhoneResponses().add(getPhoneResponse(phone, recallRequest.getName().normalize()));
         }
 
         return response;
@@ -62,13 +65,32 @@ public class RecallServiceImpl implements RecallService {
 
         if(optional.isPresent()) {
             final EmailTable emailTable = optional.get();
-            final Statistics statistics = getStatistics(emailTable.getTotal(), emailTable.getCreated(), emailTable.getUpdated());
-            response.setStatistics(statistics);
+            final Statistics stat = getStatistics(emailTable.getTotal(), emailTable.getCreated(), emailTable.getUpdated());
+            response.setStatistics(stat);
 
             emailTable.increment();
             emailTableRepo.save(emailTable);
         } else {
             emailTableRepo.save(new EmailTable(email, nameKey));
+            response.setStatistics(getStatistics(0, null, null));
+        }
+
+        return response;
+    }
+
+    private PhoneResponse getPhoneResponse(Phone phone, String nameKey) {
+        final Optional<PhoneTable> optional = phoneTableRepo.findById(getNameKey(nameKey, phone.normalize()));
+        final PhoneResponse response = new PhoneResponse(phone);
+
+        if(optional.isPresent()) {
+            final PhoneTable phoneTable = optional.get();
+            final Statistics stat = getStatistics(phoneTable.getTotal(), phoneTable.getCreated(), phoneTable.getUpdated());
+            response.setStatistics(stat);
+
+            phoneTable.increment();
+            phoneTableRepo.save(phoneTable);
+        } else {
+            phoneTableRepo.save(new PhoneTable(phone, nameKey));
             response.setStatistics(getStatistics(0, null, null));
         }
 

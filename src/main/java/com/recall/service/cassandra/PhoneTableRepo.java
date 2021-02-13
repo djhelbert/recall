@@ -5,7 +5,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
-public interface EmailTableRepo extends CrudRepository<EmailTable, NameKey> {
-    @Query("SELECT * FROM emailtable WHERE key =?0")
-    List<NameTable> findEmailByKey(String key);
+public interface PhoneTableRepo extends CrudRepository<PhoneTable, NameKey>  {
+    @Query("SELECT * FROM phonetable WHERE key =?0")
+    List<NameTable> findPhoneByKey(String key);
 }

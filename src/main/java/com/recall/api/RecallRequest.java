@@ -4,12 +4,14 @@ import com.recall.model.Email;
 import com.recall.model.Name;
 import com.recall.model.Phone;
 
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
 public class RecallRequest {
     private List<Email> emails = new ArrayList<>();
     private List<Phone> phones = new ArrayList<>();
+    @NotNull
     private Name name;
 
     public List<Email> getEmails() {
