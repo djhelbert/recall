@@ -28,12 +28,11 @@ public class RecallServiceImpl implements RecallService {
     @Override
     public RecallResponse processRequest(RecallRequest recallRequest) {
         final RecallResponse response = new RecallResponse();
-        final NameResponse nameResponse = new NameResponse(recallRequest.getName());
 
         response.setNameResponse(getNameResponse(recallRequest.getName()));
 
         for(Email email : recallRequest.getEmails()) {
-            response.getEmailResponses().add(getEmailResponse(email));
+            response.getEmailResponses().add(getEmailResponse(email, recallRequest.getName().normalize()));
         }
 
         return response;
@@ -57,22 +56,27 @@ public class RecallServiceImpl implements RecallService {
         return response;
     }
 
-    private EmailResponse getEmailResponse(Email email) {
-        final Optional<EmailTable> optional = emailTableRepo.findById(email.normalize());
+    private EmailResponse getEmailResponse(Email email, String nameKey) {
+        final Optional<EmailTable> optional = emailTableRepo.findById(getNameKey(nameKey, email.normalize()));
         final EmailResponse response = new EmailResponse(email);
 
         if(optional.isPresent()) {
             final EmailTable emailTable = optional.get();
             final Statistics statistics = getStatistics(emailTable.getTotal(), emailTable.getCreated(), emailTable.getUpdated());
+            response.setStatistics(statistics);
+
             emailTable.increment();
             emailTableRepo.save(emailTable);
-            response.setStatistics(statistics);
         } else {
-            emailTableRepo.save(new EmailTable(email));
+            emailTableRepo.save(new EmailTable(email, nameKey));
             response.setStatistics(getStatistics(0, null, null));
         }
 
         return response;
+    }
+
+    private NameKey getNameKey(String nameKey, String key) {
+        return new NameKey(nameKey, key);
     }
 
     private Statistics getStatistics(long total, LocalDateTime created, LocalDateTime updated) {

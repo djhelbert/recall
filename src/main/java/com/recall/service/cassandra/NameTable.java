@@ -26,7 +26,7 @@ public class NameTable {
         this.middle = name.getMiddle();
         this.last = name.getLast();
         this.created = LocalDateTime.now();
-        this.updated = LocalDateTime.now();
+        this.updated = null;
         this.total = 1l;
     }
 

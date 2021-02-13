@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Table
 public class EmailTable {
     @PrimaryKey
-    private String key;
+    private NameKey key;
     private String address;
     private LocalDateTime created;
     private LocalDateTime updated;
@@ -18,11 +18,11 @@ public class EmailTable {
     public EmailTable() {
     }
 
-    public EmailTable(Email email) {
-        this.key = email.normalize();
+    public EmailTable(Email email, String nameKey) {
+        this.key = new NameKey(nameKey, email.normalize());
         this.address = email.getAddress();
         this.created = LocalDateTime.now();
-        this.updated = LocalDateTime.now();
+        this.updated = null;
         this.total = 1l;
     }
 
@@ -31,11 +31,11 @@ public class EmailTable {
         this.updated = LocalDateTime.now();
     }
 
-    public String getKey() {
+    public NameKey getKey() {
         return key;
     }
 
-    public void setKey(String key) {
+    public void setKey(NameKey key) {
         this.key = key;
     }
 

@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Table
 public class PhoneTable {
     @PrimaryKey
-    private String key;
+    private NameKey key;
     private String countryCode;
     private String areaCode;
     private String prefix;
@@ -21,13 +21,14 @@ public class PhoneTable {
     public PhoneTable() {
     }
 
-    public PhoneTable(Phone phone) {
+    public PhoneTable(Phone phone, String nameKey) {
+        this.key = new NameKey(nameKey, phone.normalize());
         this.areaCode = phone.getAreaCode();
         this.countryCode = phone.getCountryCode();
         this.number = phone.getNumber();
         this.prefix = phone.getPrefix();
         this.created = LocalDateTime.now();
-        this.updated = LocalDateTime.now();
+        this.updated = null;
         this.total = 1l;
     }
 
@@ -36,11 +37,11 @@ public class PhoneTable {
         this.updated = LocalDateTime.now();
     }
 
-    public String getKey() {
+    public NameKey getKey() {
         return key;
     }
 
-    public void setKey(String key) {
+    public void setKey(NameKey key) {
         this.key = key;
     }
 
