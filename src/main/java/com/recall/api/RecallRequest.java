@@ -1,5 +1,6 @@
 package com.recall.api;
 
+import com.recall.model.DateOfBirth;
 import com.recall.model.Email;
 import com.recall.model.Name;
 import com.recall.model.Phone;
@@ -13,6 +14,7 @@ public class RecallRequest {
     private List<Phone> phones = new ArrayList<>();
     @NotNull
     private Name name;
+    DateOfBirth dateOfBirth;
 
     public List<Email> getEmails() {
         return emails;
@@ -36,5 +38,13 @@ public class RecallRequest {
 
     public void setName(Name name) {
         this.name = name;
+    }
+
+    public DateOfBirth getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(DateOfBirth dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 }

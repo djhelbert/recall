@@ -1,10 +1,7 @@
 package com.recall.service.cassandra;
 
 import com.recall.api.*;
-import com.recall.model.Email;
-import com.recall.model.Name;
-import com.recall.model.Phone;
-import com.recall.model.Statistics;
+import com.recall.model.*;
 import com.recall.service.RecallService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,25 +14,31 @@ public class RecallServiceImpl implements RecallService {
     private NameTableRepo nameTableRepo;
     private EmailTableRepo emailTableRepo;
     private PhoneTableRepo phoneTableRepo;
+    private DateOfBirthRepo dateOfBirthRepo;
 
     @Autowired
-    public RecallServiceImpl(NameTableRepo nameTableRepo, EmailTableRepo emailTableRepo, PhoneTableRepo phoneTableRepo) {
+    public RecallServiceImpl(NameTableRepo nameTableRepo, EmailTableRepo emailTableRepo, PhoneTableRepo phoneTableRepo, DateOfBirthRepo dateOfBirthRepo) {
         this.nameTableRepo = nameTableRepo;
         this.emailTableRepo = emailTableRepo;
         this.phoneTableRepo = phoneTableRepo;
+        this.dateOfBirthRepo = dateOfBirthRepo;
     }
 
     @Override
-    public RecallResponse processRequest(RecallRequest recallRequest) {
+    public RecallResponse processRequest(RecallRequest request) {
         final RecallResponse response = new RecallResponse();
 
-        response.setNameResponse(getNameResponse(recallRequest.getName()));
+        response.setName(getNameResponse(request.getName()));
 
-        for(Email email : recallRequest.getEmails()) {
-            response.getEmailResponses().add(getEmailResponse(email, recallRequest.getName().normalize()));
+        if(request.getDateOfBirth() != null) {
+            response.setDateOfBirth(getDateOfBirthResponse(request.getDateOfBirth(), request.getName().normalize()));
         }
-        for(Phone phone : recallRequest.getPhones()) {
-            response.getPhoneResponses().add(getPhoneResponse(phone, recallRequest.getName().normalize()));
+
+        for(Email email : request.getEmails()) {
+            response.getEmails().add(getEmailResponse(email, request.getName().normalize()));
+        }
+        for(Phone phone : request.getPhones()) {
+            response.getPhones().add(getPhoneResponse(phone, request.getName().normalize()));
         }
 
         return response;
@@ -91,6 +94,25 @@ public class RecallServiceImpl implements RecallService {
             phoneTableRepo.save(phoneTable);
         } else {
             phoneTableRepo.save(new PhoneTable(phone, nameKey));
+            response.setStatistics(getStatistics(0, null, null));
+        }
+
+        return response;
+    }
+
+    private DateOfBirthResponse getDateOfBirthResponse(DateOfBirth dateOfBirth, String nameKey) {
+        final Optional<DateOfBirthTable> optional = dateOfBirthRepo.findById(getNameKey(nameKey, dateOfBirth.normalize()));
+        final DateOfBirthResponse response = new DateOfBirthResponse(dateOfBirth);
+
+        if(optional.isPresent()) {
+            final DateOfBirthTable dob = optional.get();
+            final Statistics stat = getStatistics(dob.getTotal(), dob.getCreated(), dob.getUpdated());
+            response.setStatistics(stat);
+
+            dob.increment();
+            dateOfBirthRepo.save(dob);
+        } else {
+            dateOfBirthRepo.save(new DateOfBirthTable(dateOfBirth, nameKey));
             response.setStatistics(getStatistics(0, null, null));
         }
 

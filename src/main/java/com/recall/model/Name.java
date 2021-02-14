@@ -5,7 +5,7 @@ import javax.validation.constraints.NotBlank;
 /**
  * Name
  */
-public class Name {
+public class Name implements Normalized {
     @NotBlank(message = "First name is mandatory")
     private String first;
     private String middle;

@@ -2,7 +2,7 @@ package com.recall.model;
 
 import javax.validation.constraints.NotBlank;
 
-public class Phone {
+public class Phone implements Normalized {
     private String countryCode;
     private String areaCode;
     private String prefix;
