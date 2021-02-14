@@ -21,6 +21,7 @@ public class DateOfBirthTable {
         this.key = new NameKey(nameKey, dateOfBirth.normalize());
         this.month = dateOfBirth.getMonth();
         this.day = dateOfBirth.getDay();
+        this.year = dateOfBirth.getYear();
         this.month = dateOfBirth.getMonth();
         this.created = LocalDateTime.now();
         this.updated = null;
