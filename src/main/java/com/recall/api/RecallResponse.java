@@ -6,10 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RecallResponse {
-    private List<EmailResponse> emails = new ArrayList<>();
-    private List<PhoneResponse> phones = new ArrayList<>();
     private NameResponse name;
     private DateOfBirth dateOfBirth;
+    private List<EmailResponse> emails = new ArrayList<>();
+    private List<PhoneResponse> phones = new ArrayList<>();
 
     public List<EmailResponse> getEmails() {
         return emails;
