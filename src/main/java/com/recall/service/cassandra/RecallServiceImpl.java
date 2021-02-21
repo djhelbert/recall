@@ -15,30 +15,37 @@ public class RecallServiceImpl implements RecallService {
     private EmailTableRepo emailTableRepo;
     private PhoneTableRepo phoneTableRepo;
     private DateOfBirthRepo dateOfBirthRepo;
+    private AddressTableRepo addressTableRepo;
 
     @Autowired
-    public RecallServiceImpl(NameTableRepo nameTableRepo, EmailTableRepo emailTableRepo, PhoneTableRepo phoneTableRepo, DateOfBirthRepo dateOfBirthRepo) {
+    public RecallServiceImpl(NameTableRepo nameTableRepo, EmailTableRepo emailTableRepo, PhoneTableRepo phoneTableRepo, DateOfBirthRepo dateOfBirthRepo, AddressTableRepo addressTableRepo) {
         this.nameTableRepo = nameTableRepo;
         this.emailTableRepo = emailTableRepo;
         this.phoneTableRepo = phoneTableRepo;
         this.dateOfBirthRepo = dateOfBirthRepo;
+        this.addressTableRepo = addressTableRepo;
     }
 
     @Override
     public RecallResponse processRequest(RecallRequest request) {
         final RecallResponse response = new RecallResponse();
+        final String nameKey = request.getName().normalize();
 
         response.setName(getNameResponse(request.getName()));
 
+        if(request.getAddress() != null) {
+            response.setAddress(getAddressResponse(request.getAddress(), nameKey));
+        }
+
         if(request.getDateOfBirth() != null) {
-            response.setDateOfBirth(getDateOfBirthResponse(request.getDateOfBirth(), request.getName().normalize()));
+            response.setDateOfBirth(getDateOfBirthResponse(request.getDateOfBirth(), nameKey));
         }
 
         for(Email email : request.getEmails()) {
-            response.getEmails().add(getEmailResponse(email, request.getName().normalize()));
+            response.getEmails().add(getEmailResponse(email, nameKey));
         }
         for(Phone phone : request.getPhones()) {
-            response.getPhones().add(getPhoneResponse(phone, request.getName().normalize()));
+            response.getPhones().add(getPhoneResponse(phone, nameKey));
         }
 
         return response;
@@ -56,6 +63,24 @@ public class RecallServiceImpl implements RecallService {
             response.setStatistics(statistics);
         } else {
             nameTableRepo.save(new NameTable(name));
+            response.setStatistics(getStatistics(0, null, null));
+        }
+
+        return response;
+    }
+
+    private AddressResponse getAddressResponse(Address address, String nameKey) {
+        final Optional<AddressTable> optional = addressTableRepo.findById(getNameKey(nameKey, address.normalize()));
+        final AddressResponse response = new AddressResponse(address);
+
+        if(optional.isPresent()) {
+            final AddressTable addressTable = optional.get();
+            final Statistics statistics = getStatistics(addressTable.getTotal(), addressTable.getCreated(), addressTable.getUpdated());
+            addressTable.increment();
+            addressTableRepo.save(addressTable);
+            response.setStatistics(statistics);
+        } else {
+            addressTableRepo.save(new AddressTable(address, nameKey));
             response.setStatistics(getStatistics(0, null, null));
         }
 

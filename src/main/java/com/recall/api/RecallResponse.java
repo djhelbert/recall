@@ -7,9 +7,18 @@ import java.util.List;
 
 public class RecallResponse {
     private NameResponse name;
+    private AddressResponse address;
     private DateOfBirth dateOfBirth;
     private List<EmailResponse> emails = new ArrayList<>();
     private List<PhoneResponse> phones = new ArrayList<>();
+
+    public AddressResponse getAddress() {
+        return address;
+    }
+
+    public void setAddress(AddressResponse address) {
+        this.address = address;
+    }
 
     public List<EmailResponse> getEmails() {
         return emails;

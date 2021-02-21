@@ -1,9 +1,6 @@
 package com.recall.api;
 
-import com.recall.model.DateOfBirth;
-import com.recall.model.Email;
-import com.recall.model.Name;
-import com.recall.model.Phone;
+import com.recall.model.*;
 
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
@@ -14,7 +11,16 @@ public class RecallRequest {
     private List<Phone> phones = new ArrayList<>();
     @NotNull
     private Name name;
-    DateOfBirth dateOfBirth;
+    private DateOfBirth dateOfBirth;
+    private Address address;
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
 
     public List<Email> getEmails() {
         return emails;
