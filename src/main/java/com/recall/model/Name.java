@@ -48,24 +48,20 @@ public class Name implements Normalized {
     public String normalize() {
         final StringBuilder builder = new StringBuilder();
 
-        filterString(first, builder, false);
-        filterString(middle, builder, true);
-        filterString(last, builder, true);
+        filterString(first, builder);
+        filterString(middle, builder);
+        filterString(last, builder);
 
         return builder.toString();
     }
 
-    private void filterString(String value, StringBuilder builder, boolean leadingSpace) {
+    private void filterString(String value, StringBuilder builder) {
         if (value == null) {
             return;
         }
 
         // All lower case with whitespace removed & punctuation removed
         final String temp = value.toLowerCase().replaceAll("\\p{Punct}+", "").replaceAll("\\s", "");
-
-        if (temp.length() > 0 && leadingSpace) {
-            builder.append(' ');
-        }
 
         for (int i = 0; i < temp.length(); i++) {
             builder.append(temp.charAt(i));
