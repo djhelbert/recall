@@ -20,10 +20,14 @@ public class EmailTable {
 
     public EmailTable(Email email, String nameKey) {
         this.key = new NameKey(nameKey, email.normalize());
-        this.address = email.getAddress();
+        this.address = format(email.getAddress());
         this.created = LocalDateTime.now();
         this.updated = null;
         this.total = 1l;
+    }
+
+    private String format(String value) {
+        return value == null ? null : value.trim().toLowerCase();
     }
 
     public void increment() {

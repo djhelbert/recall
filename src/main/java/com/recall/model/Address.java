@@ -8,7 +8,6 @@ public class Address implements Normalized {
     private String city;
     private String state;
     private String zip;
-    private String postal;
 
     public String getStreet() {
         return street;
@@ -48,14 +47,6 @@ public class Address implements Normalized {
 
     public void setZip(String zip) {
         this.zip = zip;
-    }
-
-    public String getPostal() {
-        return postal;
-    }
-
-    public void setPostal(String postal) {
-        this.postal = postal;
     }
 
     public String normalize() {

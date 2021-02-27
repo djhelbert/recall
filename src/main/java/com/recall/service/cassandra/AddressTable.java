@@ -1,6 +1,7 @@
 package com.recall.service.cassandra;
 
 import com.recall.model.Address;
+import com.recall.util.AddressUtil;
 import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 import org.springframework.data.cassandra.core.mapping.Table;
 
@@ -15,25 +16,47 @@ public class AddressTable {
     private String city;
     private String state;
     private String zip;
-    private String postal;
     private LocalDateTime created;
     private LocalDateTime updated;
     private Long total;
 
     public AddressTable(Address address, String nameKey) {
         this.key = new NameKey(nameKey, address.normalize());
-        this.street = address.getStreet();
-        this.city = address.getCity();
-        this.street = address.getStreet();
-        this.state = address.getState();
+        this.street = processAbbreviations(address.getStreet());
+        this.city = format(address.getCity());
+        this.state = processStates(address.getState());
+        this.apartmentNum = format(address.getApartmentNum());
         this.zip = address.getZip();
-        this.postal = address.getPostal();
         this.created = LocalDateTime.now();
         this.updated = null;
         this.total = 1l;
     }
 
     public AddressTable() {
+    }
+
+    private String format(String value) {
+        return value == null ? null : value.trim().toLowerCase();
+    }
+
+    public static String processStates(String value) {
+        String result = value.toLowerCase().trim();
+
+        for(String key : AddressUtil.STATES.keySet()) {
+            result = result.replace(key, AddressUtil.STATES.get(key));
+        }
+
+        return result;
+    }
+
+    public static String processAbbreviations(String value) {
+        String result = value.toLowerCase().trim();
+
+        for(String key : AddressUtil.ABBREVIATIONS.keySet()) {
+            result = result.replace(key, AddressUtil.ABBREVIATIONS.get(key));
+        }
+
+        return result;
     }
 
     public void increment() {
@@ -87,14 +110,6 @@ public class AddressTable {
 
     public void setZip(String zip) {
         this.zip = zip;
-    }
-
-    public String getPostal() {
-        return postal;
-    }
-
-    public void setPostal(String postal) {
-        this.postal = postal;
     }
 
     public LocalDateTime getCreated() {

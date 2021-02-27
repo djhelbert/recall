@@ -22,12 +22,16 @@ public class NameTable {
 
     public NameTable(Name name) {
         this.key = name.normalize();
-        this.first = name.getFirst();
-        this.middle = name.getMiddle();
-        this.last = name.getLast();
+        this.first = format(name.getFirst());
+        this.middle = format(name.getMiddle());
+        this.last = format(name.getLast());
         this.created = LocalDateTime.now();
         this.updated = null;
         this.total = 1l;
+    }
+
+    private String format(String value) {
+      return value == null ? null : value.trim().toLowerCase();
     }
 
     public void increment() {

@@ -10,7 +10,6 @@ public class AddressResponse extends Address {
     public AddressResponse(Address address) {
         setApartmentNum(address.getApartmentNum());
         setCity(address.getCity());
-        setPostal(address.getPostal());
         setState(address.getState());
         setStreet(address.getStreet());
         setZip(address.getZip());
